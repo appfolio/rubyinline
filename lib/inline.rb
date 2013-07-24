@@ -51,8 +51,8 @@ require "rbconfig"
 require "digest/md5"
 require 'fileutils'
 require 'rubygems'
-
-require 'zentest_mapping'
+require "inline/version"
+require "inline/mapping"
 
 $TESTING = false unless defined? $TESTING
 
@@ -65,8 +65,6 @@ class CompilationError < RuntimeError; end
 # the current namespace.
 
 module Inline
-  VERSION = "3.12.2"
-
   WINDOZE  = /mswin|mingw/ =~ RUBY_PLATFORM
   RUBINIUS = defined? RUBY_ENGINE
   DEV_NULL = (WINDOZE ? 'nul'      : '/dev/null')
@@ -152,7 +150,7 @@ module Inline
 
   class C
 
-    include ZenTestMapping
+    include ::Inline::Mapping
 
     MAGIC_ARITY_THRESHOLD = 15
     MAGIC_ARITY = -1

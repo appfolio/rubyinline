@@ -1,40 +1,17 @@
-# -*- ruby -*-
-
 require 'rubygems'
-require 'hoe'
-
-Hoe.add_include_dirs "../../ZenTest/dev/lib"
-Hoe.add_include_dirs "lib"
-
-Hoe.plugin :seattlerb
-Hoe.plugin :isolate
-
-Hoe.spec "RubyInline" do
-  developer 'Ryan Davis', 'ryand-ruby@zenspider.com'
-
-  clean_globs << File.expand_path("~/.ruby_inline")
-  spec_extras[:requirements] =
-    "A POSIX environment and a compiler for your language."
-
-  dependency "ZenTest", "~> 4.3" # for ZenTest mapping
+require 'bundler'
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
 end
 
-task :test => :clean
+require "bundler/gem_tasks"
 
-desc "run all examples"
-task :examples do
-  %w(example.rb example2.rb
-     tutorial/example1.rb
-     tutorial/example2.rb).each do |e|
-    rm_rf '~/.ruby_inline'
-    ruby "-Ilib -w #{e}"
-  end
+task :test do
+  system('echo "Just run: ruby -Ilib ./test/test_inline.rb"')
 end
 
-desc "run simple benchmarks"
-task :bench do
-  verbose(false) do
-    ruby "-Ilib ./example.rb"
-    ruby "-Ilib ./example.rb 1000000 12" # 12 is the bignum cutoff for factorial
-  end
-end
+task :default => :test
